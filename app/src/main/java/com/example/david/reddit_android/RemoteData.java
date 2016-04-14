@@ -35,6 +35,23 @@ public class RemoteData {
      *
      */
     public static String readContents(String url){
+
+        //Check if the cache contains data for this URL
+
+        byte[] t= Cache.read(url);
+        String cached=null;
+        if(t!=null) {
+            cached=new String(t);
+            t=null;
+        }
+        if(cached!=null) {
+            Log.d("MSG","Using cache for "+url);
+            return cached;
+        }
+
+        //The following will be executed only if the
+        //cache did not contain data for this URL
+
         HttpURLConnection hcon=getConnection(url);
         if(hcon==null) return null;
         try{
@@ -48,6 +65,9 @@ public class RemoteData {
             while((tmp=br.readLine())!=null)
                 sb.append(tmp).append("\n");
             br.close();
+
+            // We now add this data to the cache
+            Cache.write(url, sb.toString());
             return sb.toString();
         }catch(IOException e){
             Log.d("READ FAILED", e.toString());

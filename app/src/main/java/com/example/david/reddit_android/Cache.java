@@ -16,7 +16,7 @@ import java.util.Date;
  * Created by Jamie Davidson on 12/04/2016.
  * 20099176
  */
-public class Mycache {
+public class Cache {
 
 
 
