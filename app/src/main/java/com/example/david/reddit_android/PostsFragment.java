@@ -26,7 +26,7 @@ public class PostsFragment extends Fragment {
     List<Post> posts;
     PostsHolder postsHolder;
 
-    PostsFragment(){
+    public PostsFragment(){
         handler=new Handler();
         posts=new ArrayList<Post>();
     }

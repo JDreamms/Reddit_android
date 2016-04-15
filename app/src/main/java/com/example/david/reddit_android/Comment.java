@@ -7,7 +7,7 @@ package com.example.david.reddit_android;
 public class Comment {
     String htmlText;
     String author;
-    String points;
+    int points;
     String postedOn;
 
     // The 'level' field indicates how deep in the hierarchy
@@ -16,5 +16,21 @@ public class Comment {
     // level 2 and so on...
 
     int level;
+
+    String getAuthor(){
+        String details=author;
+
+        return author;
+    }
+
+    String getHtmlText(){
+        return htmlText;
+    }
+
+    String getPoints(){
+        return Integer.toString(points);
+    }
+    String getPostedOn() {return postedOn;}
+
 
 }
