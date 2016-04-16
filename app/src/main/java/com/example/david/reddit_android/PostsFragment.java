@@ -22,28 +22,20 @@ public class PostsFragment extends Fragment {
     ArrayAdapter<Post> adapter;
     Handler handler;
 
-
     String subreddit;
     List<Post> posts;
     PostsHolder postsHolder;
-    String selected = (String) postsList.getSelectedItem();
-
-
 
     public PostsFragment(){
         handler=new Handler();
         posts=new ArrayList<Post>();
     }
 
-
-
-
     public static Fragment newInstance(String subreddit){
         PostsFragment pf=new PostsFragment();
         pf.subreddit=subreddit;
         pf.postsHolder=new PostsHolder(pf.subreddit);
         return pf;
-
     }
 
     @Override

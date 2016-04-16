@@ -16,7 +16,7 @@ public class RemoteData {
         try {
             hcon=(HttpURLConnection)new URL(url).openConnection();
             hcon.setReadTimeout(30000); // Timeout at 30 seconds
-            hcon.setRequestProperty("JD", "Reddit Android");
+            hcon.setRequestProperty("User-Agent", "Reddit Alien");
         } catch (MalformedURLException e) {
             Log.e("getConnection()",
                     "Invalid URL: "+e.toString());
