@@ -27,9 +27,9 @@ public class CommentsLoader {
         try {
             comment.htmlText = data.getString("body_html");
             comment.author = data.getString("author");
-            comment.points = (data.getString("ups")
-                    - data.getString("downs"))
-                    + "";
+            comment.points = (data.getInt("ups")
+                    - data.getInt("downs"))
+                    ;
             comment.postedOn = new Date((long) data
                     .getDouble("created_utc"))
                     .toString();

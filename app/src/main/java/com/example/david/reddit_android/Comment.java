@@ -20,7 +20,7 @@ public class Comment {
     String getAuthor(){
         String details=author;
 
-        return author;
+        return details;
     }
 
     String getHtmlText(){
