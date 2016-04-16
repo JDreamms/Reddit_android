@@ -26,7 +26,7 @@ public class PostsFragment extends Fragment {
     String subreddit;
     List<Post> posts;
     PostsHolder postsHolder;
-    String selected = (String) postsList.getSelectedItem();
+   
 
 
 
