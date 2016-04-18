@@ -22,7 +22,7 @@ public class FragActivity extends FragmentActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragments_holder
-                        , PostsFragment.newInstance("Android"))
+                        , PostsFragment.newInstance("Main"))
                 .commit();
     }
 

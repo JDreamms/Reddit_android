@@ -21,6 +21,8 @@ public class CommentsLoader {
         url = u;
     }
 
+
+
     // Load various details about the comment
     private Comment loadComment(JSONObject data, int level) {
         Comment comment = new Comment();

@@ -41,8 +41,6 @@ public class PostsHolder {
     /**
      * Returns a list of Post objects after fetching data from
      * Reddit using the JSON API.
-     *
-     *
      */
     List<Post> fetchPosts(){
         String raw=RemoteData.readContents(url);

@@ -1,15 +1,19 @@
 package com.example.david.reddit_android;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Jamie Davidson
@@ -17,7 +21,7 @@ import android.widget.TextView;
  * RGU - CASD year 4
  * Honours
  */
-public class PostsFragment extends Fragment {
+public class PostsFragment extends Fragment implements View.OnClickListener {
     ListView postsList;
     ArrayAdapter<Post> adapter;
     Handler handler;
@@ -26,7 +30,7 @@ public class PostsFragment extends Fragment {
     String subreddit;
     List<Post> posts;
     PostsHolder postsHolder;
-   
+
 
 
 
@@ -35,7 +39,9 @@ public class PostsFragment extends Fragment {
         posts=new ArrayList<Post>();
     }
 
-
+    public ListView getPostsList() {
+        return postsList;
+    }
 
 
     public static Fragment newInstance(String subreddit){
@@ -46,6 +52,7 @@ public class PostsFragment extends Fragment {
 
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
@@ -55,6 +62,8 @@ public class PostsFragment extends Fragment {
                 , false);
         postsList=(ListView)v.findViewById(R.id.posts_list);
         return v;
+
+
     }
 
     @Override
@@ -67,6 +76,16 @@ public class PostsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialize();
+        postsList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
+            {
+                Intent intent = new Intent(getActivity(), CommentFragment.class);
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     private void initialize(){
@@ -142,4 +161,11 @@ public class PostsFragment extends Fragment {
         };
         postsList.setAdapter(adapter);
     }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+
 }

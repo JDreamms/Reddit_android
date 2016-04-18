@@ -18,13 +18,9 @@ import java.util.List;
  * 20099176
  */
 public class CommentFragment extends Fragment {
-
-
         ListView commentsList;
         ArrayAdapter<Comment> adapter;
         Handler handler;
-
-        String subreddit;
         List<Comment> comments;
         CommentsLoader commentsHolder;
 
@@ -33,6 +29,16 @@ public class CommentFragment extends Fragment {
             comments =new ArrayList<Comment>();
         }
 
+    public ListView getCommentsList() {return  commentsList;}
+
+
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+    }
 
 
 

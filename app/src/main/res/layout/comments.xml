@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="50dp"
-    tools:context="com.example.david.reddit_android.LoginActivity">
+    tools:context="com.example.david.reddit_android.">
 
 
 
