@@ -25,7 +25,7 @@ public class Post {
         return details;
     }
 
-    String getTitle(){
+  public String getTitle(){
         return title;
     }
 

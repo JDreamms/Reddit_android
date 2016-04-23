@@ -37,6 +37,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".CommentActivity"
+            android:label="@string/title_activity_comment"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.intent.category.Comment" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Subreddits"
             android:label="@string/title_activity_subreddits"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -49,7 +58,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".PostToReddit" />
-        <activity android:name=".CommentActivity"></activity>
+
     </application>
 
 </manifest>

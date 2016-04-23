@@ -22,9 +22,14 @@ public class CommentsLoader {
     }
 
 
-
+    // pass JSON url of post to HERE to open new page containing comments!
+    // further TODO settings menu
+    //TODO discord or IRC chat
+    //or other chatting integration
+    //TODO Messaging
+    //todo alerts
     // Load various details about the comment
-    private Comment loadComment(JSONObject data, int level) {
+    public Comment loadComment(JSONObject data, int level) {
         Comment comment = new Comment();
         try {
             comment.htmlText = data.getString("body_html");
@@ -44,7 +49,7 @@ public class CommentsLoader {
 
     // This is where the comment is actually loaded
     // For each comment, its replies are recursively loaded
-    private void process(ArrayList<Comment> comments
+    public void process(ArrayList<Comment> comments
             , JSONArray c, int level)
             throws Exception {
         for (int i = 0; i < c.length(); i++) {
@@ -62,7 +67,7 @@ public class CommentsLoader {
     }
 
     // Add replies to the comments
-    private void addReplies(ArrayList<Comment> comments,
+    public void addReplies(ArrayList<Comment> comments,
                             JSONObject parent, int level) {
         try {
             if (parent.get("replies").equals("")) {

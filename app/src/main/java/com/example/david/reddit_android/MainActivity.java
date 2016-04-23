@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intentLogin);
 
         } else if (id == R.id.nav_gallery) {
-
+            // add browse by image
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {

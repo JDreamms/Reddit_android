@@ -34,6 +34,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
 
 
+
+
     public PostsFragment(){
         handler=new Handler();
         posts=new ArrayList<Post>();
@@ -60,6 +62,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         View v=inflater.inflate(R.layout.posts
                 , container
                 , false);
+        //find postsList
         postsList=(ListView)v.findViewById(R.id.posts_list);
         return v;
 
@@ -80,8 +83,12 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         {
             @Override public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
-                Intent intent = new Intent(getActivity(), CommentFragment.class);
-                startActivity(intent);
+                Post clickedObject = (Post) adapter.getItem(position);
+
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                intent.putExtra("url",clickedObject.getTitle());
+
+                //startActivity(intent);
 
 
             }
