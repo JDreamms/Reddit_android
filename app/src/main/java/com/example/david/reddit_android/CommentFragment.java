@@ -132,7 +132,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
             if(getActivity()==null) return;
 
             adapter=new ArrayAdapter<Comment>(getActivity()
-                    ,R.layout.comments
+                    ,R.layout.comment_item
                     , comments){
                 @Override
                 public View getView(int position,
@@ -142,7 +142,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                     if(convertView==null){
                         convertView=getActivity()
                                 .getLayoutInflater()
-                                .inflate(R.layout.comments, null);
+                                .inflate(R.layout.comment_item, null);
                     }
 
                     TextView htmlText;
