@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
  * Honours
  */
 public class FragActivity extends FragmentActivity {
+    String Subreddit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,7 @@ public class FragActivity extends FragmentActivity {
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragments_holder
-                        , PostsFragment.newInstance("Main"))
+                        , PostsFragment.newInstance(""))
                 .commit();
     }
 

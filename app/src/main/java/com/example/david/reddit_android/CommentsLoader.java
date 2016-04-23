@@ -41,6 +41,7 @@ public class CommentsLoader {
                     .getDouble("created_utc"))
                     .toString();
             comment.level = level;
+
         } catch (Exception e) {
             Log.d("ERROR", "Unable to parse comment : " + e);
         }

@@ -19,7 +19,6 @@ public class Comment {
 
     String getAuthor(){
         String details=author;
-
         return details;
     }
 

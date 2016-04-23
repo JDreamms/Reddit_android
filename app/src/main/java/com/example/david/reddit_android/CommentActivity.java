@@ -9,24 +9,32 @@ public class CommentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment);
+        setContentView(R.layout.activity_main);
         ListView commentList = (ListView)findViewById(R.id.commentsList);
         Bundle bundle = getIntent().getExtras();
+        String url;
 
-        if(bundle.getString("url")!= null)
-        {
-
-            //TODO here get the string stored in the string variable and do
-            // setText() on userName
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                url= null;
+            } else {
+                url= extras.getString("url");
+                url = "http://www.reddit.com" + url + ".json";
+                addFragment(url);
+            }
+        } else {
+            url= (String) savedInstanceState.getSerializable("url");
         }
     }
 
 
-    void addFragment(){
+    void addFragment(String url){
         getSupportFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragments_holder
-                        , PostsFragment.newInstance("Comment"))
+                        , CommentFragment.newInstance(url))
                 .commit();
     }
+
 }

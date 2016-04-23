@@ -29,6 +29,13 @@ public class Post {
         return title;
     }
 
+    public String getUrl(){
+        return url;
+    }
+    public String getPermalink(){
+        return permalink;
+    }
+
     String getScore(){
         return Integer.toString(points);
     }

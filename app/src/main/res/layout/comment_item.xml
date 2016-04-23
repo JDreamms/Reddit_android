@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context=".Comment" >
+    tools:context=".CommentActivity" >
 
 
 
@@ -14,9 +14,6 @@
         android:text="@+id/author"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="3"
-        android:ellipsize="end"
-
         android:clickable="true"
         android:layout_alignParentTop="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -37,8 +34,7 @@
             android:layout_alignBottom="@+id/points"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:ellipsize="start"
-            android:maxLines="4" />
+            />
 
 
         <TextView

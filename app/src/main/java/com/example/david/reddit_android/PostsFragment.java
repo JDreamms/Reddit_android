@@ -85,10 +85,10 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
             {
                 Post clickedObject = (Post) adapter.getItem(position);
 
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.putExtra("url",clickedObject.getTitle());
-
-                //startActivity(intent);
+                Intent intent = new Intent(getActivity(), CommentActivity.class);
+                intent.putExtra("url",clickedObject.getPermalink());
+                System.out.println(clickedObject.getPermalink());
+                startActivity(intent);
 
 
             }
@@ -100,27 +100,24 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         // setRetainInstance(true) method has been called on
         // this fragment
 
-        if(posts.size()==0){
+        // Must execute network tasks outside the UI
+// thread. So create a new thread.
+        if(posts.size()==0) new Thread() {
+            public void run() {
+                posts.addAll(postsHolder.fetchPosts());
 
-            // Must execute network tasks outside the UI
-            // thread. So create a new thread.
+                // UI elements should be accessed only in
+                // the primary thread, so we must use the
+                // handler here.
 
-            new Thread(){
-                public void run(){
-                    posts.addAll(postsHolder.fetchPosts());
-
-                    // UI elements should be accessed only in
-                    // the primary thread, so we must use the
-                    // handler here.
-
-                    handler.post(new Runnable(){
-                        public void run(){
-                            createAdapter();
-                        }
-                    });
-                }
-            }.start();
-        }else{
+                handler.post(new Runnable() {
+                    public void run() {
+                        createAdapter();
+                    }
+                });
+            }
+        }.start();
+        else{
             createAdapter();
         }
     }
