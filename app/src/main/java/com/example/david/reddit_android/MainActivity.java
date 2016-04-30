@@ -84,12 +84,8 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    void addFragment() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragments_holder
-                        , PostsFragment.newInstance(""))
-                .commit();
+    public void addFragment() {
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_holder, PostsFragment.newInstance("")).commit();
     }
 
     static public String convertToCacheName(String url) {

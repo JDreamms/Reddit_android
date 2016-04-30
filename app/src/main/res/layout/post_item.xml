@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    android:screenOrientation="portrait">
 
     <!--<HorizontalScrollView
         android:layout_width="match_parent"
@@ -13,18 +14,17 @@
         android:id="@+id/horizontalScrollView"
         android:scrollbars="none">-->
 
-
         <TextView
             android:id="@+id/post_title"
             android:text="@+id/post_score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxLines="3"
-            android:ellipsize="end"
-
+            android:paddingRight= "80dp"
             android:clickable="true"
             android:layout_alignParentTop="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:ellipsize="start"
+            android:maxLines="6"
+            android:textAppearance="?android:attr/textAppearanceSmall"
              />
     <!--</HorizontalScrollView>-->
     <!--android:scrollHorizontally="true"-->
@@ -37,14 +37,23 @@
 
         <TextView
             android:id="@+id/post_details"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:layout_alignBottom="@+id/post_score"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:ellipsize="start"
-            android:maxLines="2" />
+             />
+
+        <ImageView
+            android:id="@+id/post_image"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:scaleType="fitXY"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignRight="@+id/post_details"
+            />
 
 
         <TextView
@@ -54,7 +63,8 @@
 
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignRight="@+id/post_details"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             />
 
 

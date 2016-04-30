@@ -16,16 +16,28 @@ public class Post {
     String url;
     String domain;
     String id;
+    String preview;
+    String media;
 
+    String getMedia(){
+        return media;
+    }
     String getDetails(){
-        String details=author
-                +" posted this and got "
-                +numComments
-                +" replies";
+        String details=  "User: " + author + " " + numComments +" replies";
         return details;
     }
+    String getPreview(){
+        return preview;
+    }
+    public String setPreview(String preview){
+        preview = this.preview;
+        return preview;
+    }
 
-  public String getTitle(){
+    public String getId(){
+        return id;
+    }
+    public String getTitle(){
         return title;
     }
 
@@ -38,6 +50,20 @@ public class Post {
 
     String getScore(){
         return Integer.toString(points);
+    }
+
+    public String getSubreddit(){
+        return subreddit;
+    }
+    public String getAuthor(){
+        return author;
+    }
+    public String getDomain(){
+        return domain;
+    }
+    public String postToString(){
+        System.out.println("id: " + id + " URL " + url + " title " + title);
+        return id;
     }
 }
 

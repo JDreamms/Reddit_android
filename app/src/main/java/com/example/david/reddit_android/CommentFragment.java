@@ -19,7 +19,7 @@ import java.util.List;
  * Created by Jamie Davidson on 14/04/2016.
  * 20099176
  */
-public class CommentFragment extends Fragment implements View.OnClickListener {
+public class CommentFragment extends Fragment implements View.OnClickListener    {
 
         ListView commentsList;
         ArrayAdapter<Comment> adapter;
