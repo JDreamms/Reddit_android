@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.commonsware.cwac.anddown.AndDown;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +31,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
         Handler handler;
         List<Comment> comments;
         CommentsLoader commentsHolder;
-
+        AndDown x = new AndDown();
 
 
        public CommentFragment(){
@@ -42,7 +46,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
         CommentFragment cf=new CommentFragment();
         cf.url=url;
         cf.commentsHolder=new CommentsLoader(cf.url);
-        System.out.println(cf);
+
         return cf;
 
 
@@ -146,22 +150,23 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
                     }
 
                     TextView htmlText;
-                    htmlText=(TextView)convertView
-                            .findViewById(R.id.htmlText);
-                    System.out.println(htmlText);
+                    htmlText=(TextView)convertView.findViewById(R.id.htmlText);
+
                     TextView author;
-                    author=(TextView)convertView
-                            .findViewById(R.id.author);
+                    author=(TextView)convertView.findViewById(R.id.author);
 
                     TextView points;
-                    points=(TextView)convertView
-                            .findViewById(R.id.points);
+                    points=(TextView)convertView.findViewById(R.id.points);
 
                     TextView postedOn;
-                    postedOn=(TextView)convertView
-                            .findViewById(R.id.postedOn);
-
-                    htmlText.setText(comments.get(position).getHtmlText());
+                    postedOn=(TextView)convertView.findViewById(R.id.postedOn);
+                    String hText =  comments.get(position).getHtmlText();
+                    System.out.println(comments.get(position).getHtmlText());
+                    Spanned sp = Html.fromHtml(hText);
+                    //System.out.println(x.markdownToHtml(comments.get(position).getHtmlText()));
+                    //double decoding ahead
+                    htmlText.setText (Html.fromHtml(hText));
+                    htmlText.setText(Html.fromHtml(htmlText.getText().toString()));
                     author.setText(comments.get(position).getAuthor());
                     points.setText(comments.get(position).getPoints());
                     postedOn.setText(comments.get(position).getPostedOn());

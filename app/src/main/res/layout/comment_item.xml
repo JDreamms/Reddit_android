@@ -34,6 +34,7 @@
             android:layout_alignBottom="@+id/points"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:clickable="true"
             />
 
 
