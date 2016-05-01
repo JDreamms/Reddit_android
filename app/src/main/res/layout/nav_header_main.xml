@@ -20,6 +20,15 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing" android:text="@string/reddit_android"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Toggle Theme"
+        android:id="@+id/switch1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        />
+
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:text="@string/contact_the_dev" android:id="@+id/textView" />
 

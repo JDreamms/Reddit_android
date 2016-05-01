@@ -47,7 +47,11 @@ public class PostsHolder {
 
         } else {
             url = url.replace(".com/", r);
+            url = url.replace("/r/", "/r/" + subreddit);
             url = url.replace("AFTER", after);
+            url = url.replace(".json", count);
+            url = url.replace("?after", afterx);
+
         }
     }
 
@@ -66,8 +70,7 @@ public class PostsHolder {
                 JSONObject data = new JSONObject(raw)
                         .getJSONObject("data");
                 JSONArray children = data.getJSONArray("children");
-                System.out.println("adding to adapter ");
-                System.out.println(url);
+
 
                 //Using this property we can fetch the next set of
                 //posts from the same subreddit
@@ -109,9 +112,7 @@ public class PostsHolder {
                 JSONObject data = new JSONObject(raw)
                         .getJSONObject("data");
                 JSONArray children = data.getJSONArray("children");
-                System.out.println("adding to json reader ");
 
-                System.out.println(url);
 
                 //Using this property we can fetch the next set of
                 //posts from the same subreddit

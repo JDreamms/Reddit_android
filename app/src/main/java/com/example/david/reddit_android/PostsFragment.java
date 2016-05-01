@@ -63,6 +63,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         PostsFragment pf=new PostsFragment();
         pf.subreddit=subreddit;
         pf.postsHolder=new PostsHolder(pf.subreddit);
+
         return pf;
 
     }
@@ -99,7 +100,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra("url",clickedObject.getPermalink());
-                System.out.println(clickedObject.getPermalink());
+
                 startActivity(intent);
 
 
@@ -124,14 +125,10 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
                 int l = (posts.size());
                 l = l -1;
-                System.out.println(l);
-                System.out.println("size");
                 String x = posts.get(l).getId();
-                System.out.println(x);
                 String afterx = "after";
                 postsHolder.fetchMorePosts(x,afterx);
-                System.out.println(x);
-                System.out.println(posts.size());
+
                 posts.addAll(postsHolder.fetchPosts());
                 createAdapter();
 
@@ -147,12 +144,6 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
 
     private void initialize(){
-        // This should run only once for the fragment as the
-        // setRetainInstance(true) method has been called on
-        // this fragment
-
-        // Must execute network tasks outside the UI
-        // thread. So create a new thread.
         if(posts.size()==0) new Thread() {
             public void run() {
                 posts.addAll(postsHolder.fetchPosts());
@@ -167,10 +158,6 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    /**
-     * This method creates the adapter from the list of posts
-     * , and assigns it to the list.
-     */
 
 
     private void createAdapter(){
@@ -178,7 +165,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
 
         if(getActivity()==null) return;
-            System.out.println("activity not null");
+
 
 
             adapter = new ArrayAdapter<Post>(getActivity()
@@ -190,6 +177,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                     URL url;
                     //// TODO: 30/04/2016 add in infinite scrolling
                     if (convertView == null) {
+
                         convertView = getActivity().getLayoutInflater().inflate(R.layout.post_item, null);
                     }
 

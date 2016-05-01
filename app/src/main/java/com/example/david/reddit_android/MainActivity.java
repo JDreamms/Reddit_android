@@ -1,12 +1,17 @@
 package com.example.david.reddit_android;
 
-import android.app.Fragment;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -17,9 +22,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
+import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Switch;
 
 
 import com.google.android.gms.appindexing.Action;
@@ -41,14 +47,48 @@ public class MainActivity extends AppCompatActivity
      */
     private GoogleApiClient client;
     ListView listview;
-
+    //private static final String PREF_SUB = "";
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
+    private static final String MyPREFERENCES = "MyPrefs";
+    private static final String subreddit = "";
+    SharedPreferences sharedpreferences;
+    String sr;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //uses chosen theme
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+
+        if(useDarkTheme) {
+            setTheme(R.style.AppTheme_Dark_NoActionBar);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        System.out.println(sr + "bla");
+
+        //listener and declaration of nightmode switch.
+        Switch t = (Switch) findViewById(R.id.switch1);
+        t.setChecked(useDarkTheme);
+        //toggle for the theme
+        t.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton view, boolean isChecked) {
+                changeTheme(isChecked);
+            }
+        });
+
+        if (sr == null){
+            SharedPreferences prefs = getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
+            sr = prefs.getString("subreddit",null);
+        }
         addFragment();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,10 +109,10 @@ public class MainActivity extends AppCompatActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle toggle1 = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        drawer.setDrawerListener(toggle1);
+        toggle1.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -83,9 +123,19 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private void changeTheme(boolean darkTheme) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean(PREF_DARK_THEME, darkTheme);
+        editor.apply();
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
 
     public void addFragment() {
-        getSupportFragmentManager().beginTransaction().add(R.id.fragments_holder, PostsFragment.newInstance("")).commit();
+
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_holder, PostsFragment.newInstance(sr)).commit();
     }
 
     static public String convertToCacheName(String url) {
@@ -141,6 +191,7 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
             return true;
         }
 
@@ -158,8 +209,41 @@ public class MainActivity extends AppCompatActivity
             Intent intentLogin = new Intent(this, LoginActivity.class);
             startActivity(intentLogin);
 
-        } else if (id == R.id.nav_gallery) {
-            // add browse by image
+        } else if (id == R.id.SUBREDDIT) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("enter a subreddit");
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            b.setView(input);
+
+            // add button
+            b.setPositiveButton("Open new SubReddit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sr = input.getText().toString();
+
+                    sr = input.getText().toString();
+                    sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    editor.putString("subreddit", sr);
+                    editor.commit();
+                    Intent i = getIntent();
+                    finish();
+                    startActivity(i);
+
+                }
+            });
+            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            b.show();
+
+
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -173,7 +257,23 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
+
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putString("sr", sr);
+    }
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        this.sr = savedInstanceState.getString("sr");
+    }
+
 
 
 
@@ -217,4 +317,6 @@ public class MainActivity extends AppCompatActivity
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+
 }

@@ -28,6 +28,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="enter_subreddit">please enter a SubReddit</string>
+
     <string name="title_activity_subreddits">Subreddits</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
