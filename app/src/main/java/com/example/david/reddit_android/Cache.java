@@ -18,23 +18,22 @@ import java.util.Date;
  */
 public class Cache {
 
+    // CREDIT TO http://www.whycouch.com/2012/12/how-to-create-android-client-for-reddit_25.html HATHY A for providing a cache mechanism
 
-
-    static private String cacheDirectory =
-            "/Android/data/com.jdepths.redditAndroid/cache/";
+    static private String cacheD = "/Android/data/com.jdepths.redditAndroid/cache/";
 
 
     static {
         if(Environment.getExternalStorageState()
                 .equals(Environment.MEDIA_MOUNTED)){
-            cacheDirectory=Environment.getExternalStorageDirectory()
-                    +cacheDirectory;
-            File f=new File(cacheDirectory);
+            cacheD =Environment.getExternalStorageDirectory()
+                    + cacheD;
+            File f=new File(cacheD);
             f.mkdirs();
         }
     }
 
-    static public String convertToCacheName(String url){
+    static public String convert(String url){
         try {
             MessageDigest digest=MessageDigest.getInstance("MD5");
             digest.update(url.getBytes());
@@ -47,22 +46,20 @@ public class Cache {
         }
     }
 
-    private static boolean tooOld(long time){
-        long now=new Date().getTime();
-        long diff=now-time;
-        if(diff>1000*60*5)
+    private static boolean old(long time){
+        long x=new Date().getTime();
+        long diff=x-time;
+        if(diff>2000*70*70)
             return true;
         return false;
     }
 
     public static byte[] read(String url){
         try{
-            String file=cacheDirectory+"/"+convertToCacheName(url);
+            String file= cacheD +"/"+ convert(url);
             File f=new File(file);
             if(!f.exists() || f.length() < 1) return null;
-            if(f.exists() && tooOld(f.lastModified())){
-                // Delete the cached file if it is too old
-                f.delete();
+            if(f.exists() && old(f.lastModified())){f.delete();
             }
             byte data[]=new byte[(int)f.length()];
             DataInputStream fis=new DataInputStream(
@@ -75,7 +72,7 @@ public class Cache {
 
     public static void write(String url, String data){
         try{
-            String file=cacheDirectory+"/"+convertToCacheName(url);
+            String file= cacheD +"/"+ convert(url);
             PrintWriter pw=new PrintWriter(new FileWriter(file));
             pw.print(data);
             pw.close();

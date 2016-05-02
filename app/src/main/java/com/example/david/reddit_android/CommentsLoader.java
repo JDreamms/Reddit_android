@@ -14,14 +14,14 @@ import android.util.Log;
  */
 public class CommentsLoader {
 
-    // This will be the URL of the comments page, suffixed with .json
+
     private String url;
 
     CommentsLoader(String u) {
         url = u;
     }
 
-
+    //credit to A HATHY AGAIN FOR MASSIVE HELP HERE USED http://www.whycouch.com/2013/07/how-to-parse-and-render-reddit-comments.html
     // pass JSON url of post to HERE to open new page containing comments!
     // further TODO settings menu
     //TODO discord or IRC chat
@@ -34,13 +34,9 @@ public class CommentsLoader {
         try {
             comment.htmlText = data.getString("body_html");
             comment.author = data.getString("author");
-            comment.points = (data.getInt("ups")
-                    - data.getInt("downs"))
-                    ;
-            comment.postedOn = new Date((long) data
-                    .getDouble("created_utc"))
-                    .toString();
-            comment.level = level;
+            comment.points = (data.getInt("ups") - data.getInt("downs"));
+            comment.postedOn = new Date((long) data.getDouble("created_utc")).toString();
+
 
         } catch (Exception e) {
             Log.d("ERROR", "Unable to parse comment : " + e);
@@ -54,10 +50,8 @@ public class CommentsLoader {
             , JSONArray c, int level)
             throws Exception {
         for (int i = 0; i < c.length(); i++) {
-            if (c.getJSONObject(i).optString("kind") == null)
-                continue;
-            if (c.getJSONObject(i).optString("kind").equals("t1") == false)
-                continue;
+            if (c.getJSONObject(i).optString("kind") == null) continue;
+            if (c.getJSONObject(i).optString("kind").equals("t1") == false) continue;
             JSONObject data = c.getJSONObject(i).getJSONObject("data");
             Comment comment = loadComment(data, level);
             if (comment.author != null) {
@@ -92,7 +86,7 @@ public class CommentsLoader {
         try {
 
             // Fetch the contents of the comments page
-            String raw = RemoteData.readContents(url);
+            String raw = GetData.Read(url);
 
             JSONArray r = new JSONArray(raw)
                     .getJSONObject(1)

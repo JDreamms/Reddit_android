@@ -6,8 +6,8 @@
             android:title="@string/Login" />
         <item android:id="@+id/SUBREDDIT" android:icon="@android:drawable/ic_input_get"
             android:title="@string/Subreddits" />
-        <item android:id="@+id/nav_slideshow" android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+        <item android:id="@+id/nav_traffic" android:icon="@android:drawable/ic_menu_help"
+            android:title="@string/Traffic" />
         <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
             android:title="Tools" />
 

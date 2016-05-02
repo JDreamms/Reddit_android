@@ -29,7 +29,8 @@ public class LoginActivity extends AppCompatActivity  {
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
 
-
+    //Credit to http://www.whycouch.com/2013/03/how-to-log-in-to-reddit-using-java-for.html#uds-search-results AUTHOR A HATHY for most of this
+    // the method that they used was old and did not work as she had implemented but was a MAJOR help in getting this to work
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -109,7 +110,7 @@ public class LoginActivity extends AppCompatActivity  {
             Log.d("Unable to connect", url);
             return null;
         }
-        // Timeout after 10 seconds
+        // Timeout x 10 seconds
         connection.setReadTimeout(10000);
         connection.setDoOutput(true);
         return connection;

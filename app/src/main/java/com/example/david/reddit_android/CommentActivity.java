@@ -38,13 +38,9 @@ public class CommentActivity extends AppCompatActivity {
         }
     }
 
-
+//adds fragment to activity
     void addFragment(String url){
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragments_holder
-                        , CommentFragment.newInstance(url))
-                .commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.fragments_holder, CommentFragment.newInstance(url)).commit();
     }
 
 }

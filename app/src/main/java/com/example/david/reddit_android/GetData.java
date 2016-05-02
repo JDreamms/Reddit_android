@@ -8,35 +8,25 @@ package com.example.david.reddit_android;
         import java.net.URL;
         import android.util.Log;
 
-public class RemoteData {
+public class GetData {
 
-    public static HttpURLConnection getConnection(String url){
+
+    public static HttpURLConnection getCon(String url){
         System.out.println("URL: "+url);
         HttpURLConnection hcon = null;
         try {
             hcon=(HttpURLConnection)new URL(url).openConnection();
             hcon.setReadTimeout(30000); // Timeout at 30 seconds
-            hcon.setRequestProperty("JD", "Reddit Android");
+            hcon.setRequestProperty("JD", "Reddit_Android");
         } catch (MalformedURLException e) {
-            Log.e("getConnection()",
-                    "Invalid URL: "+e.toString());
+            Log.e("getCon()", e.toString());
         } catch (IOException e) {
-            Log.e("getConnection()",
-                    "Could not connect: "+e.toString());
+            Log.e("getCon()", e.toString());
         }
         return hcon;
     }
 
-
-    /**
-     * A very handy utility method that reads the contents of a URL
-     * and returns them as a String.
-     *
-     *
-     */
-    public static String readContents(String url){
-
-        //Check if the cache contains data for this URL
+    public static String Read(String url){
 
         byte[] t= Cache.read(url);
         String cached=null;
@@ -49,10 +39,9 @@ public class RemoteData {
             return cached;
         }
 
-        //The following will be executed only if the
-        //cache did not contain data for this URL
 
-        HttpURLConnection hcon=getConnection(url);
+
+        HttpURLConnection hcon= getCon(url);
         if(hcon==null) return null;
         try{
             StringBuffer sb=new StringBuffer(8192);
@@ -65,8 +54,6 @@ public class RemoteData {
             while((tmp=br.readLine())!=null)
                 sb.append(tmp).append("\n");
             br.close();
-
-            // We now add this data to the cache
             Cache.write(url, sb.toString());
             return sb.toString();
         }catch(IOException e){

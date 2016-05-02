@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity
     private static final String PREF_DARK_THEME = "dark_theme";
     private static final String MyPREFERENCES = "MyPrefs";
     private static final String subreddit = "";
+    private static final String traffic ="";
     SharedPreferences sharedpreferences;
     String sr;
 
@@ -89,7 +90,15 @@ public class MainActivity extends AppCompatActivity
             SharedPreferences prefs = getSharedPreferences("MyPrefs", Activity.MODE_PRIVATE);
             sr = prefs.getString("subreddit",null);
         }
-        addFragment();
+        try {
+            addFragment();
+        } catch (Exception e) {
+            sr = "";
+            addFragment();
+        }
+
+
+        //addFragment();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -138,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().add(R.id.fragments_holder, PostsFragment.newInstance(sr)).commit();
     }
 
-    static public String convertToCacheName(String url) {
+    static public String convertCache(String url) {
         try {
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.update(url.getBytes());
@@ -243,8 +252,40 @@ public class MainActivity extends AppCompatActivity
 
             b.show();
 
+            //code for retreiving Traffic from a subreddit
+        } else if (id == R.id.nav_traffic) {
+            AlertDialog.Builder b = new AlertDialog.Builder(this);
+            b.setTitle("enter a subreddit");
+            final EditText input = new EditText(this);
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            b.setView(input);
 
-        } else if (id == R.id.nav_slideshow) {
+            // add button
+            b.setPositiveButton("Select Traffic Subreddit", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    String traffic;
+                    traffic = input.getText().toString();
+
+                    traffic = input.getText().toString();
+                    sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    editor.putString("Traffic", traffic);
+                    Uri uri = Uri.parse("https://www.reddit.com/r/" +traffic + "/about/traffic");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+
+                }
+            });
+            b.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            b.show();
 
         } else if (id == R.id.nav_manage) {
 

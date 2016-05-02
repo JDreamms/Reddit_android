@@ -1,6 +1,5 @@
 package com.example.david.reddit_android;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -25,12 +24,12 @@ import java.util.List;
  */
 public class CommentFragment extends Fragment implements View.OnClickListener    {
 
-        ListView commentsList;
+        ListView cList;
         ArrayAdapter<Comment> adapter;
         String url;
         Handler handler;
         List<Comment> comments;
-        CommentsLoader commentsHolder;
+        CommentsLoader cHolder;
         AndDown x = new AndDown();
 
 
@@ -39,15 +38,15 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
             comments =new ArrayList<Comment>();
         }
 
-    public ListView getCommentsList() {return  commentsList;}
+    public ListView getcList() {return cList;}
 
 
     public static Fragment newInstance(String url){
-        CommentFragment cf=new CommentFragment();
-        cf.url=url;
-        cf.commentsHolder=new CommentsLoader(cf.url);
+        CommentFragment comFrag=new CommentFragment();
+        comFrag.url=url;
+        comFrag.cHolder =new CommentsLoader(comFrag.url);
 
-        return cf;
+        return comFrag;
 
 
     }
@@ -61,8 +60,8 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
         View v=inflater.inflate(R.layout.comments
                 , container
                 , false);
-        //find postsList
-        commentsList=(ListView)v.findViewById(R.id.commentsList);
+        //find pList
+        cList =(ListView)v.findViewById(R.id.commentsList);
         return v;
 
 
@@ -78,7 +77,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialize();
-        commentsList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        cList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
@@ -94,23 +93,13 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
     }
 
     private void initialize(){
-        // This should run only once for the fragment as the
-        // setRetainInstance(true) method has been called on
-        // this fragment
-
         if(comments.size()==0){
 
-            // Must execute network tasks outside the UI
-            // thread. So create a new thread.
+            //new thread
 
             new Thread(){
                 public void run(){
-                    comments.addAll(commentsHolder.fetchComments());
-
-                    // UI elements should be accessed only in
-                    // the primary thread, so we must use the
-                    // handler here.
-
+                    comments.addAll(cHolder.fetchComments());
                     handler.post(new Runnable(){
                         public void run(){
                             createAdapter();
@@ -126,10 +115,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
 
 
 
-    /**
-         * This method creates the adapter from the list of posts
-         * , and assigns it to the list.
-         */
+   //creates adapter for comments
         private void createAdapter(){
 
 
@@ -151,20 +137,17 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
 
                     TextView htmlText;
                     htmlText=(TextView)convertView.findViewById(R.id.htmlText);
-
                     TextView author;
                     author=(TextView)convertView.findViewById(R.id.author);
-
                     TextView points;
                     points=(TextView)convertView.findViewById(R.id.points);
-
                     TextView postedOn;
                     postedOn=(TextView)convertView.findViewById(R.id.postedOn);
                     String hText =  comments.get(position).getHtmlText();
-                    System.out.println(comments.get(position).getHtmlText());
                     Spanned sp = Html.fromHtml(hText);
                     //System.out.println(x.markdownToHtml(comments.get(position).getHtmlText()));
                     //double decoding ahead
+                    //had issue with ability to parse comment formatting, issue with decoding only once, solution is to double encode
                     htmlText.setText (Html.fromHtml(hText));
                     htmlText.setText(Html.fromHtml(htmlText.getText().toString()));
                     author.setText(comments.get(position).getAuthor());
@@ -173,7 +156,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener   
                     return convertView;
                 }
             };
-            commentsList.setAdapter(adapter);
+            cList.setAdapter(adapter);
         }
 
     @Override

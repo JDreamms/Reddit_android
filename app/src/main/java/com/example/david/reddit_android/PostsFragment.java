@@ -1,14 +1,11 @@
 package com.example.david.reddit_android;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -21,14 +18,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Created by Jamie Davidson
@@ -37,15 +32,14 @@ import android.widget.Toast;
  * Honours
  */
 public class PostsFragment extends Fragment implements View.OnClickListener {
-    ListView postsList;
+    ListView pList;
     ArrayAdapter<Post> adapter;
     Handler handler;
-    boolean fin = false;
     Button loadmore;
 
     String subreddit;
     List<Post> posts;
-    PostsHolder postsHolder;
+    PostsLoader postsLoader;
     private FragmentManager supportFragmentManager;
 
 
@@ -54,16 +48,15 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         posts=new ArrayList<Post>();
     }
 
-    public ListView getPostsList() {
-        return postsList;
+    public ListView getpList() {
+        return pList;
     }
 
 
     public static Fragment newInstance(String subreddit){
         PostsFragment pf=new PostsFragment();
         pf.subreddit=subreddit;
-        pf.postsHolder=new PostsHolder(pf.subreddit);
-
+        pf.postsLoader =new PostsLoader(pf.subreddit);
         return pf;
 
     }
@@ -72,8 +65,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.posts, container, false);
-        //find postsList
-        postsList=(ListView)v.findViewById(R.id.posts_list);
+        //find pList
+        pList =(ListView)v.findViewById(R.id.posts_list);
         loadmore=(Button)v.findViewById(R.id.btn);
         return v;
 
@@ -92,7 +85,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initialize();
-        postsList.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        pList.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
@@ -100,14 +93,14 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
                 Intent intent = new Intent(getActivity(), CommentActivity.class);
                 intent.putExtra("url",clickedObject.getPermalink());
-
+                System.out.println(clickedObject.getPermalink());
                 startActivity(intent);
 
 
             }
         });
 
-        postsList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        pList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override public boolean onItemLongClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
@@ -122,14 +115,18 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
         loadmore.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                //loads more posts
                 int l = (posts.size());
                 l = l -1;
+                System.out.println(l);
+                System.out.println("size");
                 String x = posts.get(l).getId();
-                String afterx = "after";
-                postsHolder.fetchMorePosts(x,afterx);
-
-                posts.addAll(postsHolder.fetchPosts());
+                System.out.println(x);
+                String afterx = "x";
+                postsLoader.getMorePosts(x,afterx);
+                System.out.println(x);
+                System.out.println(posts.size());
+                posts.addAll(postsLoader.getPosts());
                 createAdapter();
 
 
@@ -144,9 +141,15 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
 
     private void initialize(){
+        // This should run only once for the fragment as the
+        // setRetainInstance(true) method has been called on
+        // this fragment
+
+        // Must execute network tasks outside the UI
+        // thread. So create a new thread.
         if(posts.size()==0) new Thread() {
             public void run() {
-                posts.addAll(postsHolder.fetchPosts());
+                posts.addAll(postsLoader.getPosts());
 
                 // UI elements should be accessed only in
                 // the primary thread, so we must use the
@@ -158,6 +161,10 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    /**
+     * This method creates the adapter from the list of posts
+     * , and assigns it to the list.
+     */
 
 
     private void createAdapter(){
@@ -165,7 +172,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
 
         if(getActivity()==null) return;
-
+            System.out.println("activity not null");
 
 
             adapter = new ArrayAdapter<Post>(getActivity()
@@ -177,14 +184,13 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                     URL url;
                     //// TODO: 30/04/2016 add in infinite scrolling
                     if (convertView == null) {
-
                         convertView = getActivity().getLayoutInflater().inflate(R.layout.post_item, null);
                     }
 
 
 
-                        TextView postTitle;
-                        postTitle = (TextView) convertView.findViewById(R.id.post_title);
+                        TextView pTitle;
+                        pTitle = (TextView) convertView.findViewById(R.id.post_title);
 
                         TextView postDetails;
                         postDetails = (TextView) convertView.findViewById(R.id.post_details);
@@ -195,7 +201,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                         TextView postScore;
                         postScore = (TextView) convertView.findViewById(R.id.post_score);
 
-                        postTitle.setText(posts.get(position).title);
+                        pTitle.setText(posts.get(position).title);
                         postDetails.setText(posts.get(position).getDetails());
                         postScore.setText(posts.get(position).getScore());
                         try {
@@ -208,8 +214,8 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
                                 thumbnail.setImageBitmap(x);
                         }
                         posts.get(position).setPreview("");
-                        //todo fix me
-                        //depreciated
+
+
                         //prints preview / thumbnail
                         /*System.out.println(posts.get(position).getPreview() + " this is a thumbnail for " + position);
                         if (posts.get(position).getPreview().contains("self") || posts.get(position).getPreview().contains("self.")) {
@@ -248,7 +254,7 @@ public class PostsFragment extends Fragment implements View.OnClickListener {
 
             };
 
-            postsList.setAdapter(adapter);
+            pList.setAdapter(adapter);
 
 
 

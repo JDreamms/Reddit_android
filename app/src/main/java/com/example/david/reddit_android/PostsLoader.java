@@ -13,80 +13,72 @@ import android.util.Log;
  * RGU - CASD year 4
  * Honours
  */
-public class PostsHolder {
+public class PostsLoader {
     private final String URL_TEMPLATE =
             "http://www.reddit.com/"
                     + ".json"
-                    + "?after=t3_AFTER";
+                    + "?x=t3_AFTER";
     String afterx;
     String subreddit;
     String url;
-    String after;
+    String x;
     String r = ".com/r/";
     String count = ".json?count=25&";
     //List list;
     List<Post> list = new ArrayList<Post>();
 
-    PostsHolder(String sr) {
+    PostsLoader(String sr) {
         subreddit = sr;
-        after = "";
-        afterx = "after";
-        generateURL(after,afterx);
+        x = "";
+        afterx = "x";
+        genURL(x,afterx);
     }
 
-    /**
-     * Generates the actual URL from the template based on the
-     * subreddit name and the 'after' property.
-     */
-    private void generateURL(String after, String afterx) {
+    //generate url
+    private void genURL(String after, String afterx) {
         url = "" + URL_TEMPLATE.replace("x", subreddit);
+        //if there is a subreddit selected
         if (subreddit.equals("")) {
             url = url.replace("AFTER", after);
             url = url.replace(".json", count);
-            url = url.replace("?after", afterx);
-
+            url = url.replace("?x", afterx);
+        //if no subreddit selected
         } else {
             url = url.replace(".com/", r);
             url = url.replace("/r/", "/r/" + subreddit);
             url = url.replace("AFTER", after);
             url = url.replace(".json", count);
-            url = url.replace("?after", afterx);
+            url = url.replace("?x", afterx);
 
         }
     }
 
-    /**
-     * Returns a list of Post objects after fetching data from
-     * Reddit using the JSON API.
-     */
-    List<Post> fetchPosts() {
+    //returns posts
+    List<Post> getPosts() {
 
-        String raw = RemoteData.readContents(url);
+        String raw = GetData.Read(url);
         if (list.size() < 1) {
 
 
-            //List<Post> list = new ArrayList<Post>();
+
             try {
                 JSONObject data = new JSONObject(raw)
                         .getJSONObject("data");
                 JSONArray children = data.getJSONArray("children");
 
 
-                //Using this property we can fetch the next set of
-                //posts from the same subreddit
-                //after=data.getString("after");
-
+                // gets next set of data
                 for (int i = 0; i < children.length(); i++) {
                     JSONObject current = children.getJSONObject(i)
                             .getJSONObject("data");
                     Post x = new Post();
                     x.title = current.optString("title");
-                    x.url = current.optString("url");
+                    x.subreddit = current.optString("subreddit");
                     x.numComments = current.optInt("num_comments");
                     x.points = current.optInt("score");
-                    x.author = current.optString("author");
-                    x.subreddit = current.optString("subreddit");
                     x.permalink = current.optString("permalink");
+                    x.url = current.optString("url");
+                    x.author = current.optString("author");
                     x.domain = current.optString("domain");
                     x.id = current.optString("id");
                     if (current.optString("thumbnail").equals("") || current.optString("thumbnail").equals("self") || current.optString("thumbnail").contains("self.")) {
@@ -94,15 +86,12 @@ public class PostsHolder {
                     } else {
                         x.preview = current.optString("thumbnail");
                     }
-
-
                     if (x.title != null)
                         list.add(x);
 
 
                 }
             } catch (Exception e) {
-                Log.e("fetchPosts()", e.toString());
             }
             return list;
         }
@@ -112,24 +101,19 @@ public class PostsHolder {
                 JSONObject data = new JSONObject(raw)
                         .getJSONObject("data");
                 JSONArray children = data.getJSONArray("children");
-
-
-                //Using this property we can fetch the next set of
-                //posts from the same subreddit
-                //after=data.getString("after");
-
                 for (int i = 0; i < children.length(); i++) {
                     JSONObject current = children.getJSONObject(i)
                             .getJSONObject("data");
                     Post x = new Post();
                     x.title = current.optString("title");
-                    x.url = current.optString("url");
-                    x.numComments = current.optInt("num_comments");
                     x.points = current.optInt("score");
                     x.author = current.optString("author");
                     x.subreddit = current.optString("subreddit");
-                    x.permalink = current.optString("permalink");
                     x.domain = current.optString("domain");
+                    x.url = current.optString("url");
+                    x.numComments = current.optInt("num_comments");
+
+                    x.permalink = current.optString("permalink");
                     x.id = current.optString("id");
                     if (current.optString("thumbnail").equals("") || current.optString("thumbnail").equals("self") || current.optString("thumbnail").contains("self.")) {
                         x.preview = "";
@@ -144,7 +128,7 @@ public class PostsHolder {
 
                 }
             } catch (Exception e) {
-                Log.e("fetchPosts()", e.toString());
+                Log.e("getPosts()", e.toString());
             }
             return list;
 
@@ -154,10 +138,10 @@ public class PostsHolder {
 
 
     }
-    public List<Post> fetchMorePosts (String after, String afterx){
-        generateURL(after, afterx);
-        fetchPosts();
-        return fetchPosts();
+    public List<Post> getMorePosts(String after, String afterx){
+        genURL(after, afterx);
+        getPosts();
+        return getPosts();
     }
 
 }

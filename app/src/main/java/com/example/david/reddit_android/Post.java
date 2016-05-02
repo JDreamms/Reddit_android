@@ -7,10 +7,7 @@ package com.example.david.reddit_android;
  * Honours
  */
 public class Post {
-    String subreddit;
-    String title;
-    String author;
-    int points;
+    //post
     int numComments;
     String permalink;
     String url;
@@ -18,10 +15,16 @@ public class Post {
     String id;
     String preview;
     String media;
+    String subreddit;
+    String title;
+    String author;
+    int points;
+
 
     String getMedia(){
         return media;
     }
+    //returns what will be shown under posts
     String getDetails(){
         String details=  "User: " + author + " " + numComments +" replies";
         return details;
@@ -32,6 +35,10 @@ public class Post {
     public String setPreview(String preview){
         preview = this.preview;
         return preview;
+    }
+    public String postToString(){
+        System.out.println("id: " + id + " URL " + url + " title " + title);
+        return id;
     }
 
     public String getId(){
@@ -61,9 +68,6 @@ public class Post {
     public String getDomain(){
         return domain;
     }
-    public String postToString(){
-        System.out.println("id: " + id + " URL " + url + " title " + title);
-        return id;
-    }
+
 }
 
